@@ -98,9 +98,10 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
 .face.cheer{animation:cheer .5s}
 
 /* ---- コマンドれっしゃ ---- */
-.railbox{background:#fff;border:3px dashed var(--rule);border-radius:16px;padding:10px 10px 8px;min-height:64px;
-  max-height:190px;overflow-y:auto;scroll-behavior:smooth;
+.railbox{background:#fff;border:3px dashed var(--rule);border-radius:16px;padding:10px 10px 8px;height:140px;
+  overflow-y:auto;scroll-behavior:smooth;
   display:flex;flex-wrap:wrap;align-content:flex-start;align-items:flex-start;gap:10px 8px}
+.railbox:has(.rail-empty){align-content:center;justify-content:center}
 .rail-empty{color:#d99ab8;font-size:12px;padding:6px 2px}
 .chip{flex:0 0 auto;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
   font-size:24px;color:var(--ink);border:2.5px solid;animation:pop .25s}
