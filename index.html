@@ -348,22 +348,47 @@ const LEVELS = [
   {no:12, title:"ハートを とって ゴール", hint:"さきに ♡ を とってから ゴールへ",
    c:6, r:6, start:[1,6], goal:[6,1], walls:[], gem:[1,1], rep:true, max:4},
 
-  /* ---- ここから「おなじ かたちの くりかえし」たいけん ---- */
-  {no:13, title:"おなじ かたちを 3かい", hint:"みぎ・みぎ・うえ を 3かい くりかえそう",
-   c:7, r:7, start:[1,7], goal:[7,4], walls:[], gem:null},
-  {no:14, title:"にたち かたちを もう1かい", hint:"うえ・ひだり・ひだり を 3かい くりかえそう",
-   c:7, r:7, start:[7,7], goal:[1,4], walls:[], gem:null},
-  {no:15, title:"6かいも くりかえすよ", hint:"みぎ・うえ を 6かい・・・ゆびが つかれちゃう！",
-   c:7, r:7, start:[1,7], goal:[7,1], walls:[], gem:null},
+  /* ---- ここから「おなじ かたちの くりかえし」たいけん ----
+     せまい みちに かべを おいて、まっすぐ ショートカットできない ようにしてある。
+     だから くりかえしカードだけでは らくできず、おなじ かたちを 何回も
+     じぶんで くりかえす たいへんさを あじわえる。 */
+  {no:13, title:"おなじ かたちを 3かい", hint:"みぎ・みぎ・うえ の せまい みちを 3かい すすもう",
+   c:7, r:4, start:[1,4], goal:[7,1],
+   walls:[[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[1,2],[2,2],[3,2],[4,2],[1,3],[2,3],[6,3],[7,3],[4,4],[5,4],[6,4],[7,4]],
+   gem:null},
+  {no:14, title:"にたち かたちを もう1かい", hint:"うえ・ひだり・ひだり の せまい みちを 3かい すすもう",
+   c:7, r:4, start:[7,4], goal:[1,1],
+   walls:[[4,1],[5,1],[6,1],[7,1],[1,2],[2,2],[6,2],[7,2],[1,3],[2,3],[3,3],[4,3],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4]],
+   gem:null},
+  {no:15, title:"6かいも くりかえすよ", hint:"みぎ・うえ の せまい みちを 6かい・・・ゆびが つかれちゃう！",
+   c:7, r:7, start:[1,7], goal:[7,1],
+   walls:[[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[1,2],[2,2],[3,2],[4,2],[5,2],[1,3],[2,3],[3,3],[4,3],[7,3],
+          [1,4],[2,4],[3,4],[6,4],[7,4],[1,5],[2,5],[5,5],[6,5],[7,5],[1,6],[4,6],[5,6],[6,6],[7,6],
+          [3,7],[4,7],[5,7],[6,7],[7,7]],
+   gem:null},
 
-  /* ---- ここから「わざ（かんすう）」が つかえる ---- */
-  {no:16, title:"わざを つくってみよう", hint:"おなじ うごきは『わざ』に できるよ（かんすう だよ）",
-   c:7, r:7, start:[1,7], goal:[7,1], walls:[], gem:null, func:true, max:6},
-  {no:17, title:"わざで らくらく", hint:"みぎ・みぎ・うえ の わざを つくって 4かい つかおう",
-   c:9, r:8, start:[1,8], goal:[9,4], walls:[], gem:null, func:true, max:5},
+  /* ---- ここから「わざ（かんすう）」が つかえる ----
+     13〜15と おなじ みち を つかっているので、「あのとき たいへんだった みち が
+     わざを つかうと らくに なる」と じっかんできる。 */
+  {no:16, title:"わざを つくってみよう", hint:"おなじ みちだよ！おなじ うごきは『わざ』に できるよ（かんすう だよ）",
+   c:7, r:7, start:[1,7], goal:[7,1],
+   walls:[[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[1,2],[2,2],[3,2],[4,2],[5,2],[1,3],[2,3],[3,3],[4,3],[7,3],
+          [1,4],[2,4],[3,4],[6,4],[7,4],[1,5],[2,5],[5,5],[6,5],[7,5],[1,6],[4,6],[5,6],[6,6],[7,6],
+          [3,7],[4,7],[5,7],[6,7],[7,7]],
+   gem:null, func:true, max:6},
+  {no:17, title:"わざで らくらく", hint:"さっきと おなじ みち！ わざを つくって 3かい つかおう",
+   c:7, r:4, start:[1,4], goal:[7,1],
+   walls:[[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[1,2],[2,2],[3,2],[4,2],[1,3],[2,3],[6,3],[7,3],[4,4],[5,4],[6,4],[7,4]],
+   gem:null, func:true, max:3},
   {no:18, title:"わざで ハートも ゲット", hint:"わざで すすみながら とちゅうの ♡ も ひろおう",
-   c:8, r:8, start:[8,8], goal:[4,4], walls:[], gem:[6,6], func:true, max:5},
+   c:7, r:4, start:[7,4], goal:[1,1],
+   walls:[[4,1],[5,1],[6,1],[7,1],[1,2],[2,2],[6,2],[7,2],[1,3],[2,3],[3,3],[4,3],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4]],
+   gem:[5,3], func:true, max:3},
 ];
+
+// いちど つかえるように なった ボタンは、あとの もんだいでも きえない
+const FIRST_REP_IDX = LEVELS.findIndex(L=>L.rep);
+const FIRST_FUNC_IDX = LEVELS.findIndex(L=>L.func);
 
 const DIRS = {
   up:   {dx:0,  dy:-1, arrow:"▲"},
@@ -377,6 +402,7 @@ let li = 0;          // レベル番号(index)
 let lvl, cat, queue, gotGem, running, muted=false;
 let funcs=[];         // このレベルで つくった わざ [{icon, steps:[dir,...]}]
 let funcDraft=[];     // わざを つくっている とちゅうの てじゅん
+let repUnlocked=false, funcUnlocked=false; // ボタンが つかえるように なったか
 const FUNC_ICONS=["🌟","🐾"];
 
 const $ = s => document.querySelector(s);
@@ -412,8 +438,10 @@ function loadLevel(i){
   $("#badge").textContent = lvl.no;
   $("#ttl").textContent = lvl.title;
   $("#hint").textContent = lvl.hint;
-  $("#numrow").classList.toggle("on", !!lvl.rep);
-  $("#funcbox").classList.toggle("on", !!lvl.func);
+  repUnlocked = FIRST_REP_IDX>=0 && li>=FIRST_REP_IDX;
+  funcUnlocked = FIRST_FUNC_IDX>=0 && li>=FIRST_FUNC_IDX;
+  $("#numrow").classList.toggle("on", repUnlocked);
+  $("#funcbox").classList.toggle("on", funcUnlocked);
   renderFuncSlots();
   buildBoard();
   renderQueue();
@@ -500,7 +528,7 @@ function renderQueue(){
 function addCmd(dir){
   if(running) return;
   if(lvl.max && cardCount()+1 > lvl.max){
-    setTalk("カードは "+lvl.max+"まいまで！ "+(lvl.func ? "わざを つかおう" : "くりかえしカードを つかおう")); return;
+    setTalk("カードは "+lvl.max+"まいまで！ "+(funcUnlocked ? "わざを つかおう" : "くりかえしカードを つかおう")); return;
   }
   if(!lvl.max && cardCount()>=16){ setTalk("カードは 16まいまでだよ"); return; }
   queue.push({d:dir, n:1}); sPick(); renderQueue(); setTalk("");
@@ -743,7 +771,7 @@ document.addEventListener("keydown",e=>{
   else if(e.key==="Enter"){ e.preventDefault(); funcOpen ? confirmFunc() : run(); }
   else if(e.key==="Backspace"){ e.preventDefault(); funcOpen ? undoFuncDraft() : undo(); }
   else if(e.key==="Escape" && funcOpen){ e.preventDefault(); closeFuncBuilder(); }
-  else if(/^[2-6]$/.test(e.key) && lvl.rep && !funcOpen){ e.preventDefault(); addRep(+e.key); }
+  else if(/^[2-6]$/.test(e.key) && repUnlocked && !funcOpen){ e.preventDefault(); addRep(+e.key); }
 });
 
 loadLevel(0);
