@@ -37,6 +37,17 @@ body{
 h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
   font-size:clamp(18px,5vw,26px);margin:2px 0 0;text-align:center;letter-spacing:.02em}
 .wrap{width:100%;max-width:460px;display:flex;flex-direction:column;gap:12px}
+.layout{display:flex;flex-direction:column;gap:12px;width:100%}
+.col-board,.col-controls{display:flex;flex-direction:column;gap:12px;width:100%}
+
+/* ---- タブレット・よこむき（はば広めの がめん）---- */
+@media (min-width:700px){
+  .wrap{max-width:960px}
+  .layout{flex-direction:row;align-items:flex-start;gap:22px}
+  .col-board{flex:0 0 auto;width:min(46vw,440px);position:sticky;top:12px}
+  .col-controls{flex:1 1 320px;min-width:280px;max-width:520px}
+  h1{font-size:clamp(20px,3vw,28px)}
+}
 
 /* ---- ヘッダ ---- */
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -197,44 +208,50 @@ footer{font-size:11px;color:#c99;margin-top:2px;text-align:center}
     <button class="icon-btn" id="sound" aria-label="おと">🔊</button>
   </div>
 
-  <div class="title-card">
-    <div class="badge" id="badge">1</div>
-    <div style="flex:1">
-      <div class="t" id="ttl">まっすぐ すすもう</div>
-      <div class="h" id="hint">みぎ に すすむだけ</div>
+  <div class="layout">
+    <div class="col-board">
+      <div class="title-card">
+        <div class="badge" id="badge">1</div>
+        <div style="flex:1">
+          <div class="t" id="ttl">まっすぐ すすもう</div>
+          <div class="h" id="hint">みぎ に すすむだけ</div>
+        </div>
+        <div class="counter" id="counter"></div>
+      </div>
+
+      <div class="board-wrap">
+        <div class="board" id="board"></div>
+      </div>
     </div>
-    <div class="counter" id="counter"></div>
-  </div>
 
-  <div class="board-wrap">
-    <div class="board" id="board"></div>
-  </div>
+    <div class="col-controls">
+      <div class="talk" id="talk">カードを えらんで 「じっこう」を おしてね</div>
 
-  <div class="talk" id="talk">カードを えらんで 「じっこう」を おしてね</div>
+      <div class="railbox" id="rail"><span class="rail-empty">ここに カードが ならぶよ</span></div>
 
-  <div class="railbox" id="rail"><span class="rail-empty">ここに カードが ならぶよ</span></div>
+      <div class="pad" id="pad">
+        <button class="dir up"    data-dir="up"><span class="ar">▲</span><span class="lb">まえ</span></button>
+        <button class="dir left"  data-dir="left"><span class="ar">◀</span><span class="lb">ひだり</span></button>
+        <button class="dir down"  data-dir="down"><span class="ar">▼</span><span class="lb">うしろ</span></button>
+        <button class="dir right" data-dir="right"><span class="ar">▶</span><span class="lb">みぎ</span></button>
+      </div>
 
-  <div class="pad" id="pad">
-    <button class="dir up"    data-dir="up"><span class="ar">▲</span><span class="lb">まえ</span></button>
-    <button class="dir left"  data-dir="left"><span class="ar">◀</span><span class="lb">ひだり</span></button>
-    <button class="dir down"  data-dir="down"><span class="ar">▼</span><span class="lb">うしろ</span></button>
-    <button class="dir right" data-dir="right"><span class="ar">▶</span><span class="lb">みぎ</span></button>
-  </div>
+      <div class="numrow" id="numrow">
+        <span class="numlbl">くりかえし</span>
+        <button class="numbtn" data-n="2">2</button>
+        <button class="numbtn" data-n="3">3</button>
+        <button class="numbtn" data-n="4">4</button>
+        <button class="numbtn" data-n="5">5</button>
+        <button class="numbtn" data-n="6">6</button>
+      </div>
 
-  <div class="numrow" id="numrow">
-    <span class="numlbl">くりかえし</span>
-    <button class="numbtn" data-n="2">2</button>
-    <button class="numbtn" data-n="3">3</button>
-    <button class="numbtn" data-n="4">4</button>
-    <button class="numbtn" data-n="5">5</button>
-    <button class="numbtn" data-n="6">6</button>
-  </div>
-
-  <div class="controls">
-    <button class="btn small" id="undo" aria-label="1つ もどす">↩︎</button>
-    <button class="btn small" id="clear" aria-label="ぜんぶ けす">🗑</button>
-    <button class="btn go" id="run">▶ じっこう</button>
-    <button class="btn small" id="reset" aria-label="さいしょから">⟲</button>
+      <div class="controls">
+        <button class="btn small" id="undo" aria-label="1つ もどす">↩︎</button>
+        <button class="btn small" id="clear" aria-label="ぜんぶ けす">🗑</button>
+        <button class="btn go" id="run">▶ じっこう</button>
+        <button class="btn small" id="reset" aria-label="さいしょから">⟲</button>
+      </div>
+    </div>
   </div>
 
   <footer>やじるしを タップ → 「じっこう」で ねこちゃんが うごくよ</footer>
