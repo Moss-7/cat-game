@@ -133,9 +133,8 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
   border-radius:99px;padding:4px 9px;white-space:nowrap;display:none}
 
 /* ---- ほうこうボタン ---- */
-.pad{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(2,1fr);gap:8px;
-  max-width:280px;margin:0 auto;width:100%}
-.dir{aspect-ratio:1;border-radius:18px;border:3px solid;background:#fff;cursor:pointer;
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.dir{border-radius:18px;border:3px solid;background:#fff;cursor:pointer;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
   font-family:"Zen Maru Gothic",sans-serif;font-weight:900;color:var(--ink);
   box-shadow:0 4px 0 rgba(0,0,0,.08);transition:transform .06s}
@@ -144,10 +143,11 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
 .dir:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.08)}
 .dir:focus-visible{outline:3px solid var(--lav);outline-offset:2px}
 .dir[disabled]{opacity:.4;cursor:default}
-.dir.up{grid-column:2;grid-row:1;background:var(--mintbg);border-color:var(--mint)}
-.dir.left{grid-column:1;grid-row:2;background:var(--peachbg);border-color:var(--peach-d)}
-.dir.down{grid-column:2;grid-row:2;background:var(--lavbg);border-color:var(--lav)}
-.dir.right{grid-column:3;grid-row:2;background:var(--pinkbg);border-color:var(--pink)}
+.dir.up{grid-column:1/-1;flex-direction:row;height:60px;background:var(--mintbg);border-color:var(--mint)}
+.dir.up .ar{font-size:26px}
+.dir.left{aspect-ratio:1;background:var(--peachbg);border-color:var(--peach-d)}
+.dir.down{aspect-ratio:1;background:var(--lavbg);border-color:var(--lav)}
+.dir.right{aspect-ratio:1;background:var(--pinkbg);border-color:var(--pink)}
 
 /* ---- そうさボタン ---- */
 .controls{display:flex;gap:8px}
