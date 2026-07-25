@@ -98,8 +98,9 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
 .face.cheer{animation:cheer .5s}
 
 /* ---- コマンドれっしゃ ---- */
-.railbox{background:#fff;border:3px dashed var(--rule);border-radius:16px;padding:8px 10px;min-height:64px;
-  display:flex;align-items:center;gap:6px;overflow-x:auto}
+.railbox{background:#fff;border:3px dashed var(--rule);border-radius:16px;padding:10px 10px 8px;min-height:64px;
+  max-height:190px;overflow-y:auto;scroll-behavior:smooth;
+  display:flex;flex-wrap:wrap;align-content:flex-start;align-items:flex-start;gap:10px 8px}
 .rail-empty{color:#d99ab8;font-size:12px;padding:6px 2px}
 .chip{flex:0 0 auto;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
   font-size:24px;color:var(--ink);border:2.5px solid;animation:pop .25s}
@@ -108,8 +109,11 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
 .chip.left{background:var(--peachbg);border-color:var(--peach-d)}
 .chip.right{background:var(--pinkbg);border-color:var(--pink)}
 .chip.doing{transform:scale(1.15);box-shadow:0 0 0 3px #fff,0 0 0 6px var(--sun)}
-.grp{flex:0 0 auto;display:flex;gap:3px;padding:2px;border-radius:14px}
+.grp{flex:0 0 auto;position:relative;display:flex;gap:3px;padding:2px;border-radius:14px}
 .grp.doing{background:#fff6da;box-shadow:0 0 0 3px var(--sun)}
+.ord{position:absolute;top:-8px;left:-6px;z-index:3;width:16px;height:16px;border-radius:50%;
+  background:var(--pink-d);color:#fff;font-size:9px;font-weight:900;line-height:1;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #fff}
 .chip.num{background:#fff6da;border-color:var(--sun);flex-direction:column;gap:0;line-height:1}
 .chip.num b{font-family:"Mochiy Pop One",sans-serif;font-size:18px;color:#c98b00}
 .chip.num small{font-size:9px;color:#c98b00}
@@ -379,6 +383,9 @@ function renderQueue(){
   queue.forEach((q,i)=>{
     const g=document.createElement("div");
     g.className="grp"; g.dataset.i=i;
+    const o=document.createElement("div");
+    o.className="ord"; o.textContent=i+1;
+    g.appendChild(o);
     const c=document.createElement("div");
     c.className="chip "+q.d; c.textContent=DIRS[q.d].arrow;
     g.appendChild(c);
@@ -389,7 +396,7 @@ function renderQueue(){
     }
     rail.appendChild(g);
   });
-  rail.scrollLeft = rail.scrollWidth;
+  rail.scrollTop = rail.scrollHeight;
 }
 
 function addCmd(dir){
@@ -442,7 +449,10 @@ async function run(){
   const grps=[...rail.children];
   for(let i=0;i<queue.length;i++){
     grps.forEach(g=>g.classList.remove("doing"));
-    if(grps[i]) grps[i].classList.add("doing");
+    if(grps[i]){
+      grps[i].classList.add("doing");
+      grps[i].scrollIntoView({block:"nearest", behavior:"smooth"});
+    }
     const item=queue[i];
     const {dx,dy}=DIRS[item.d];
 
