@@ -273,9 +273,9 @@ footer{font-size:11px;color:#c99;margin-top:2px;text-align:center}
       <div class="railbox" id="rail"><span class="rail-empty">ここに カードが ならぶよ</span></div>
 
       <div class="pad" id="pad">
-        <button class="dir up"    data-dir="up"><span class="ar">▲</span><span class="lb">まえ</span></button>
+        <button class="dir up"    data-dir="up"><span class="ar">▲</span><span class="lb">うえ</span></button>
         <button class="dir left"  data-dir="left"><span class="ar">◀</span><span class="lb">ひだり</span></button>
-        <button class="dir down"  data-dir="down"><span class="ar">▼</span><span class="lb">うしろ</span></button>
+        <button class="dir down"  data-dir="down"><span class="ar">▼</span><span class="lb">した</span></button>
         <button class="dir right" data-dir="right"><span class="ar">▶</span><span class="lb">みぎ</span></button>
       </div>
 
@@ -323,9 +323,9 @@ footer{font-size:11px;color:#c99;margin-top:2px;text-align:center}
     <p>やじるしを おして、うごきを つくってね</p>
     <div class="railbox func-build-rail" id="funcBuildRail"><span class="rail-empty">やじるしを おしてね</span></div>
     <div class="pad" id="funcPad">
-      <button class="dir up"    data-fdir="up"><span class="ar">▲</span><span class="lb">まえ</span></button>
+      <button class="dir up"    data-fdir="up"><span class="ar">▲</span><span class="lb">うえ</span></button>
       <button class="dir left"  data-fdir="left"><span class="ar">◀</span><span class="lb">ひだり</span></button>
-      <button class="dir down"  data-fdir="down"><span class="ar">▼</span><span class="lb">うしろ</span></button>
+      <button class="dir down"  data-fdir="down"><span class="ar">▼</span><span class="lb">した</span></button>
       <button class="dir right" data-fdir="right"><span class="ar">▶</span><span class="lb">みぎ</span></button>
     </div>
     <div class="controls" style="margin-top:10px">
@@ -343,9 +343,9 @@ footer{font-size:11px;color:#c99;margin-top:2px;text-align:center}
 const LEVELS = [
   {no:1, title:"まっすぐ すすもう", hint:"みぎ に すすむだけ",
    c:5, r:5, start:[1,3], goal:[4,3], walls:[], gem:null},
-  {no:2, title:"うえに すすもう", hint:"まえ は うえ だよ",
+  {no:2, title:"うえに すすもう", hint:"うえの ボタンを おしてみよう",
    c:5, r:5, start:[3,5], goal:[3,2], walls:[], gem:null},
-  {no:3, title:"まがってみよう", hint:"みぎ と まえ を くみあわせよう",
+  {no:3, title:"まがってみよう", hint:"みぎ と うえ を くみあわせよう",
    c:5, r:5, start:[1,5], goal:[3,3], walls:[], gem:null},
   {no:4, title:"かべを よけよう", hint:"むらさきの かべは とおれない",
    c:5, r:5, start:[1,5], goal:[5,5], walls:[[3,5],[3,4]], gem:null},
@@ -355,13 +355,13 @@ const LEVELS = [
    c:5, r:5, start:[1,5], goal:[4,2], walls:[], gem:null},
   {no:7, title:"ながい いっぽんみち", hint:"みぎ を なんかい おすかな？",
    c:5, r:5, start:[1,5], goal:[5,5], walls:[], gem:null},
-  {no:8, title:"かどを まがって ゴール", hint:"みぎ に いって、まえ で うえへ",
+  {no:8, title:"かどを まがって ゴール", hint:"みぎ に いって、うえへ",
    c:5, r:5, start:[1,5], goal:[5,1], walls:[], gem:null},
 
   /* ---- ここから くりかえしカード ---- */
   {no:9, title:"ながい みちを みじかく", hint:"みぎ の あとに かずカードを おこう",
    c:7, r:5, start:[1,3], goal:[7,3], walls:[], gem:null, rep:true, max:2},
-  {no:10, title:"L の みちを みじかく", hint:"みぎ と まえ、2つの かたまりで いけるよ",
+  {no:10, title:"L の みちを みじかく", hint:"みぎ と うえ、2つの かたまりで いけるよ",
    c:6, r:6, start:[1,6], goal:[6,1], walls:[], gem:null, rep:true, max:4},
   {no:11, title:"かべを こえて いこう", hint:"うえ に あがってから よこに すすもう",
    c:6, r:6, start:[1,6], goal:[6,6], walls:[[4,6],[4,5]], gem:null, rep:true, max:6},
