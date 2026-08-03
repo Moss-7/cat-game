@@ -89,6 +89,14 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
 .gem::before{top:-50%;left:0}.gem::after{right:-50%;top:0}
 .gem.got{opacity:0;transform:rotate(-45deg) scale(0);transition:.4s}
 
+/* ---- きせき（すすんだ みち）---- */
+.trail{position:absolute;inset:20%;border-radius:8px;display:flex;align-items:center;justify-content:center;
+  font-size:55%;font-weight:900;opacity:.9;pointer-events:none;z-index:2;animation:pop .2s}
+.trail.up{background:var(--mintbg);color:var(--mint-d)}
+.trail.down{background:var(--lavbg);color:var(--lav-d)}
+.trail.left{background:var(--peachbg);color:var(--peach-d)}
+.trail.right{background:var(--pinkbg);color:var(--pink-d)}
+
 /* ---- ねこちゃん ---- */
 .cat{position:absolute;left:calc((var(--cc) - .5)/var(--c)*100%);
   top:calc((var(--cr) - .5)/var(--r)*100%);width:calc(100%/var(--c));height:calc(100%/var(--r));
@@ -452,10 +460,14 @@ function loadLevel(i){
   setControls(false);
 }
 
+let cellEls={};   // "x,y" -> そのマスの div（きせきを おくのに つかう）
+let trail=[];     // すすんだ みちの きろく [{x,y,dir}]
+
 function buildBoard(){
   board.style.setProperty("--c", lvl.c);
   board.style.setProperty("--r", lvl.r);
   board.innerHTML="";
+  cellEls={}; trail=[];
   const wallSet = new Set(lvl.walls.map(w=>w[0]+","+w[1]));
   for(let y=1;y<=lvl.r;y++){
     for(let x=1;x<=lvl.c;x++){
@@ -467,6 +479,7 @@ function buildBoard(){
         const g=document.createElement("div"); g.className="gem"; g.id="gem"; d.appendChild(g);
       }
       board.appendChild(d);
+      cellEls[x+","+y]=d;
     }
   }
   const c=document.createElement("div");
@@ -474,6 +487,26 @@ function buildBoard(){
   c.innerHTML='<div class="face" id="face"><i></i><i></i><span class="ck l"></span><span class="ck r"></span><span class="mo"></span></div>';
   board.appendChild(c);
   placeCat(false);
+}
+
+function clearTrail(){
+  trail=[];
+  Object.values(cellEls).forEach(el=>{
+    const t=el.querySelector(".trail");
+    if(t) t.remove();
+  });
+}
+
+function markTrail(x,y,dir){
+  trail.push({x,y,dir});
+  const cellEl=cellEls[x+","+y];
+  if(!cellEl) return;
+  const old=cellEl.querySelector(".trail");
+  if(old) old.remove();
+  const t=document.createElement("div");
+  t.className="trail "+dir;
+  t.textContent=DIRS[dir].arrow;
+  cellEl.appendChild(t);
 }
 
 function placeCat(){
@@ -635,6 +668,7 @@ async function doOneStep(dir){
     return "bump";
   }
   cat.x=nx; cat.y=ny; placeCat(); sStep();
+  markTrail(nx,ny,dir);
   await sleep(340);
   // ハート
   if(lvl.gem && cat.x===lvl.gem[0] && cat.y===lvl.gem[1] && !gotGem){
@@ -655,6 +689,7 @@ async function run(){
   cat={x:lvl.start[0], y:lvl.start[1]}; gotGem=false;
   const gemEl=$("#gem"); if(gemEl) gemEl.classList.remove("got");
   placeCat();
+  clearTrail();
   await sleep(300);
 
   const grps=[...rail.children];
@@ -701,6 +736,7 @@ function backToStart(){
   cat={x:lvl.start[0], y:lvl.start[1]}; gotGem=false;
   const g=$("#gem"); if(g) g.classList.remove("got");
   placeCat();
+  clearTrail();
 }
 
 function reset(){
