@@ -90,12 +90,14 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
 .gem.got{opacity:0;transform:rotate(-45deg) scale(0);transition:.4s}
 
 /* ---- きせき（すすんだ みち）---- */
-.trail{position:absolute;inset:20%;border-radius:8px;display:flex;align-items:center;justify-content:center;
+/* コマンドと おなじ いろ・やじるしを、とおった みちすじ（マスの まん中）に のこす */
+.trail{position:absolute;inset:22%;border-radius:8px;display:flex;align-items:center;justify-content:center;
   font-size:55%;font-weight:900;opacity:.9;pointer-events:none;z-index:2;animation:pop .2s}
 .trail.up{background:var(--mintbg);color:var(--mint-d)}
 .trail.down{background:var(--lavbg);color:var(--lav-d)}
 .trail.left{background:var(--peachbg);color:var(--peach-d)}
 .trail.right{background:var(--pinkbg);color:var(--pink-d)}
+.trail.start{background:#fff;border:2px solid var(--pink);font-size:50%}
 
 /* ---- ねこちゃん ---- */
 .cat{position:absolute;left:calc((var(--cc) - .5)/var(--c)*100%);
@@ -509,6 +511,17 @@ function markTrail(x,y,dir){
   cellEl.appendChild(t);
 }
 
+function markStart(x,y){
+  const cellEl=cellEls[x+","+y];
+  if(!cellEl) return;
+  const old=cellEl.querySelector(".trail");
+  if(old) old.remove();
+  const t=document.createElement("div");
+  t.className="trail start";
+  t.textContent="🐾";
+  cellEl.appendChild(t);
+}
+
 function placeCat(){
   const el=$("#cat");
   el.style.setProperty("--cc", cat.x);
@@ -690,6 +703,7 @@ async function run(){
   const gemEl=$("#gem"); if(gemEl) gemEl.classList.remove("got");
   placeCat();
   clearTrail();
+  markStart(cat.x, cat.y);
   await sleep(300);
 
   const grps=[...rail.children];
