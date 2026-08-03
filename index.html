@@ -681,14 +681,10 @@ async function run(){
     }
   }
   grps.forEach(g=>g.classList.remove("doing"));
-  // おわっても ゴールで ない → スタートに もどる
-  if(lvl.gem && !gotGem) setTalk("♡ を とってから ゴールしよう！");
-  else setTalk("あとちょっと！ スタートに もどるよ");
-  await sleep(700);
-  backToStart();
-  await sleep(400);
+  // おわっても ゴールで ない → その ばしょで とめて、カードを なおしてもらう
+  if(lvl.gem && !gotGem) setTalk("♡ を とってから ゴールしよう！ カードを なおしてみよう");
+  else setTalk("おしい！ カードを なおして もういちど やってみよう");
   running=false; setControls(false);
-  setTalk("カードを なおして もういちど やってみよう");
 }
 
 function win(){
