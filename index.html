@@ -90,14 +90,23 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
 .gem.got{opacity:0;transform:rotate(-45deg) scale(0);transition:.4s}
 
 /* ---- きせき（すすんだ みち）---- */
-/* コマンドと おなじ いろ・やじるしを、とおった みちすじ（マスの まん中）に のこす */
-.trail{position:absolute;inset:22%;border-radius:8px;display:flex;align-items:center;justify-content:center;
-  font-size:55%;font-weight:900;opacity:.9;pointer-events:none;z-index:2;animation:pop .2s}
-.trail.up{background:var(--mintbg);color:var(--mint-d)}
-.trail.down{background:var(--lavbg);color:var(--lav-d)}
-.trail.left{background:var(--peachbg);color:var(--peach-d)}
-.trail.right{background:var(--pinkbg);color:var(--pink-d)}
-.trail.start{background:#fff;border:2px solid var(--pink);font-size:50%}
+/* とおった マスと マスを、ロープの ような せんで つなぎ、コマンドと
+   おなじ いろ・やじるしの マークを その せん（＝マス目の きょうかい）の
+   うえに おく */
+.trail-line{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
+.trail-rope{stroke-width:.1;stroke-linecap:round}
+.trail-rope.up{stroke:var(--mint-d)}
+.trail-rope.down{stroke:var(--lav-d)}
+.trail-rope.left{stroke:var(--peach-d)}
+.trail-rope.right{stroke:var(--pink-d)}
+.trail-mark{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;
+  pointer-events:none;z-index:4;animation:pop .2s;box-shadow:0 0 0 2px #fff}
+.trail-mark.up{background:var(--mintbg);color:var(--mint-d)}
+.trail-mark.down{background:var(--lavbg);color:var(--lav-d)}
+.trail-mark.left{background:var(--peachbg);color:var(--peach-d)}
+.trail-mark.right{background:var(--pinkbg);color:var(--pink-d)}
+.trail-mark.start{background:#fff;border:2px solid var(--pink);font-size:11px}
 
 /* ---- ねこちゃん ---- */
 .cat{position:absolute;left:calc((var(--cc) - .5)/var(--c)*100%);
@@ -462,14 +471,14 @@ function loadLevel(i){
   setControls(false);
 }
 
-let cellEls={};   // "x,y" -> そのマスの div（きせきを おくのに つかう）
-let trail=[];     // すすんだ みちの きろく [{x,y,dir}]
+let trail=[];     // すすんだ みちの きろく [{fromX,fromY,toX,toY,dir}]
+const SVG_NS="http://www.w3.org/2000/svg";
 
 function buildBoard(){
   board.style.setProperty("--c", lvl.c);
   board.style.setProperty("--r", lvl.r);
   board.innerHTML="";
-  cellEls={}; trail=[];
+  trail=[];
   const wallSet = new Set(lvl.walls.map(w=>w[0]+","+w[1]));
   for(let y=1;y<=lvl.r;y++){
     for(let x=1;x<=lvl.c;x++){
@@ -481,9 +490,13 @@ function buildBoard(){
         const g=document.createElement("div"); g.className="gem"; g.id="gem"; d.appendChild(g);
       }
       board.appendChild(d);
-      cellEls[x+","+y]=d;
     }
   }
+  const svg=document.createElementNS(SVG_NS,"svg");
+  svg.setAttribute("class","trail-line"); svg.id="trailSvg";
+  svg.setAttribute("viewBox","0 0 "+lvl.c+" "+lvl.r);
+  svg.setAttribute("preserveAspectRatio","none");
+  board.appendChild(svg);
   const c=document.createElement("div");
   c.className="cat"; c.id="cat";
   c.innerHTML='<div class="face" id="face"><i></i><i></i><span class="ck l"></span><span class="ck r"></span><span class="mo"></span></div>';
@@ -491,35 +504,45 @@ function buildBoard(){
   placeCat(false);
 }
 
-function clearTrail(){
-  trail=[];
-  Object.values(cellEls).forEach(el=>{
-    const t=el.querySelector(".trail");
-    if(t) t.remove();
-  });
+// マス番号(1はじまり)から、ばんの なかの ％いちを もとめる
+function posPct(gx,gy){
+  return { left:((gx-0.5)/lvl.c*100)+"%", top:((gy-0.5)/lvl.r*100)+"%" };
 }
 
-function markTrail(x,y,dir){
-  trail.push({x,y,dir});
-  const cellEl=cellEls[x+","+y];
-  if(!cellEl) return;
-  const old=cellEl.querySelector(".trail");
-  if(old) old.remove();
+function clearTrail(){
+  trail=[];
+  document.querySelectorAll(".trail-mark").forEach(el=>el.remove());
+  const svg=$("#trailSvg");
+  if(svg) svg.innerHTML="";
+}
+
+// とおった みちを、マスとマスを つなぐ ロープの せんで あらわし、
+// せんの まんなか（＝マス目の きょうかいせん の うえ）に やじるしを おく
+function markTrail(fromX,fromY,toX,toY,dir){
+  trail.push({fromX,fromY,toX,toY,dir});
+  const svg=$("#trailSvg");
+  if(svg){
+    const line=document.createElementNS(SVG_NS,"line");
+    line.setAttribute("x1", fromX-0.5); line.setAttribute("y1", fromY-0.5);
+    line.setAttribute("x2", toX-0.5); line.setAttribute("y2", toY-0.5);
+    line.setAttribute("class","trail-rope "+dir);
+    svg.appendChild(line);
+  }
+  const mid=posPct((fromX+toX)/2, (fromY+toY)/2);
   const t=document.createElement("div");
-  t.className="trail "+dir;
+  t.className="trail-mark "+dir;
+  t.style.left=mid.left; t.style.top=mid.top;
   t.textContent=DIRS[dir].arrow;
-  cellEl.appendChild(t);
+  board.appendChild(t);
 }
 
 function markStart(x,y){
-  const cellEl=cellEls[x+","+y];
-  if(!cellEl) return;
-  const old=cellEl.querySelector(".trail");
-  if(old) old.remove();
+  const p=posPct(x,y);
   const t=document.createElement("div");
-  t.className="trail start";
+  t.className="trail-mark start";
+  t.style.left=p.left; t.style.top=p.top;
   t.textContent="🐾";
-  cellEl.appendChild(t);
+  board.appendChild(t);
 }
 
 function placeCat(){
@@ -674,6 +697,7 @@ function inBoard(x,y){ return x>=1&&x<=lvl.c&&y>=1&&y<=lvl.r; }
 // 1マス すすむ。もどりち: "bump"（かべ）| "goal"（ゴール）| "continue"
 async function doOneStep(dir){
   const {dx,dy}=DIRS[dir];
+  const fx=cat.x, fy=cat.y;
   const nx=cat.x+dx, ny=cat.y+dy;
   if(!inBoard(nx,ny) || isWall(nx,ny)){
     const f=$("#face"); f.classList.add("bump"); sBump();
@@ -681,7 +705,7 @@ async function doOneStep(dir){
     return "bump";
   }
   cat.x=nx; cat.y=ny; placeCat(); sStep();
-  markTrail(nx,ny,dir);
+  markTrail(fx,fy,nx,ny,dir);
   await sleep(340);
   // ハート
   if(lvl.gem && cat.x===lvl.gem[0] && cat.y===lvl.gem[1] && !gotGem){
