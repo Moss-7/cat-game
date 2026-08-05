@@ -54,8 +54,13 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
 .levelpick{display:flex;gap:6px;flex-wrap:wrap}
 .lv{width:30px;height:30px;border-radius:50%;border:2.5px solid var(--rule);background:#fff;
   font-family:"Mochiy Pop One",sans-serif;font-size:13px;color:var(--pink);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;padding:0;line-height:1}
+  display:flex;align-items:center;justify-content:center;padding:0;line-height:1;position:relative}
 .lv.on{background:var(--pink);color:#fff;border-color:var(--pink);box-shadow:0 2px 0 var(--pink-d)}
+.lv.cleared{background:var(--mintbg);border-color:var(--mint-d);color:var(--mint-d)}
+.lv.cleared.on{background:var(--pink);color:#fff;border-color:var(--pink)}
+.lv.cleared::after{content:"✓";position:absolute;top:-6px;right:-6px;width:14px;height:14px;
+  border-radius:50%;background:var(--mint-d);color:#fff;font-size:9px;font-weight:900;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #fff}
 .lv:focus-visible{outline:3px solid var(--lav);outline-offset:2px}
 .icon-btn{width:38px;height:38px;border-radius:50%;border:2.5px solid var(--rule);background:#fff;
   font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
@@ -425,6 +430,19 @@ let funcDraft=[];     // わざを つくっている とちゅうの てじゅ�
 let repUnlocked=false, funcUnlocked=false; // ボタンが つかえるように なったか
 const FUNC_ICONS=["🌟","🐾"];
 
+/* ====== クリアした もんだいの きろく（この きき・この ブラウザに ほぞん） ====== */
+const CLEAR_KEY="nekogame_cleared_v1";
+function loadClearedSet(){
+  try{
+    const raw=localStorage.getItem(CLEAR_KEY);
+    return new Set(raw ? JSON.parse(raw) : []);
+  }catch(e){ return new Set(); }
+}
+function saveClearedSet(){
+  try{ localStorage.setItem(CLEAR_KEY, JSON.stringify([...clearedSet])); }catch(e){}
+}
+let clearedSet=loadClearedSet();
+
 const $ = s => document.querySelector(s);
 const board=$("#board"), rail=$("#rail"), talk=$("#talk"),
       overlay=$("#overlay"), confetti=$("#confetti");
@@ -768,6 +786,12 @@ function win(){
   $("#next").textContent = (li===LEVELS.length-1) ? "もういちど あそぶ ▶" : "つぎの もんだいへ ▶";
   setTimeout(()=>overlay.classList.add("on"),450);
   running=false;
+  if(!clearedSet.has(lvl.no)){
+    clearedSet.add(lvl.no);
+    saveClearedSet();
+    const btn=lp.children[li];
+    if(btn) btn.classList.add("cleared");
+  }
 }
 
 function backToStart(){
@@ -811,7 +835,8 @@ function rainHearts(){
 const lp=$("#levelpick");
 LEVELS.forEach((L,i)=>{
   const b=document.createElement("button");
-  b.className="lv"; b.textContent=L.no; b.setAttribute("aria-label","もんだい"+L.no);
+  b.className="lv"+(clearedSet.has(L.no) ? " cleared" : "");
+  b.textContent=L.no; b.setAttribute("aria-label","もんだい"+L.no+(clearedSet.has(L.no) ? "（クリアずみ）" : ""));
   b.addEventListener("click",()=>loadLevel(i));
   lp.appendChild(b);
 });
