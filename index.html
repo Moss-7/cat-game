@@ -51,6 +51,7 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
 
 /* ---- ヘッダ ---- */
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.topbar-btns{display:flex;gap:6px;flex:0 0 auto}
 .levelpick{display:flex;gap:6px;flex-wrap:wrap}
 .lv{width:30px;height:30px;border-radius:50%;border:2.5px solid var(--rule);background:#fff;
   font-family:"Mochiy Pop One",sans-serif;font-size:13px;color:var(--pink);cursor:pointer;
@@ -253,7 +254,10 @@ footer{font-size:11px;color:#c99;margin-top:2px;text-align:center}
 <div class="wrap">
   <div class="topbar">
     <div class="levelpick" id="levelpick"></div>
-    <button class="icon-btn" id="sound" aria-label="おと">🔊</button>
+    <div class="topbar-btns">
+      <button class="icon-btn" id="resetProgress" aria-label="クリアきろくを けす">🔄</button>
+      <button class="icon-btn" id="sound" aria-label="おと">🔊</button>
+    </div>
   </div>
 
   <div class="layout">
@@ -853,6 +857,14 @@ $("#next").addEventListener("click",()=> li===LEVELS.length-1 ? loadLevel(0) : l
 $("#sound").addEventListener("click",()=>{
   muted=!muted; $("#sound").textContent=muted?"🔈":"🔊";
   if(!muted) sPick();
+});
+$("#resetProgress").addEventListener("click",()=>{
+  if(clearedSet.size===0) return;
+  const ok=confirm("いままでの クリアきろくを ぜんぶ けしますか？\nこのそうさは もとに もどせません。");
+  if(!ok) return;
+  clearedSet=new Set();
+  saveClearedSet();
+  document.querySelectorAll(".lv.cleared").forEach(b=>b.classList.remove("cleared"));
 });
 $("#funcMakeBtn").addEventListener("click",()=>{ if(!running) openFuncBuilder(); });
 $("#funcCancel").addEventListener("click",closeFuncBuilder);
