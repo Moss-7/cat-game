@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
+  /* ---- テーマの いろ（ステージで かわる）---- */
   --ink:#6a4457;
   --paper:#fffdfe;
   --cream:#fff3f8;
@@ -17,10 +18,29 @@
   --pink:#ff8bb0;
   --pink-d:#f06f9a;
   --pinkbg:#ffe3ee;
+  /* ---- やじるしの いろ（ステージが かわっても おなじ）---- */
   --peach:#ffcaa6; --peachbg:#ffe8d8; --peach-d:#f0a878;
   --mint:#8fd8c3; --mintbg:#dcf4ec; --mint-d:#5fc3a8;
   --lav:#cbb7e6; --lavbg:#eee6f8; --lav-d:#a98bd4;
+  --dirR:#ff8bb0; --dirRbg:#ffe3ee; --dirR-d:#f06f9a;
   --sun:#ffcf4d;
+  --shadow-soft:#ffd0e0;   /* ばん・カードの したの かげ */
+  --grid-line:#ffe0ec;     /* ばんの ますめの せん */
+  --hint-ink:#a5789a;      /* ヒントの もじ */
+  --muted:#d99ab8;         /* うすい あんない もじ */
+}
+/* ---- ステージ2（もんだい19から）は うすむらさきの みため ---- */
+body.stage2{
+  --ink:#544066;
+  --cream:#f4f0fc;
+  --rule:#c7b3e8;
+  --pink:#9b7ad1;
+  --pink-d:#7d5cb8;
+  --pinkbg:#e8e0f8;
+  --shadow-soft:#d9cbf0;
+  --grid-line:#e7ddf7;
+  --hint-ink:#8878a5;
+  --muted:#b0a0cc;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
@@ -74,14 +94,14 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
   font-family:"Mochiy Pop One",sans-serif;font-size:16px;display:flex;align-items:center;
   justify-content:center;box-shadow:0 3px 0 var(--pink-d)}
 .title-card .t{font-family:"Mochiy Pop One",sans-serif;font-size:16px;color:var(--ink)}
-.title-card .h{font-size:11px;color:#a5789a;margin-top:1px}
+.title-card .h{font-size:11px;color:var(--hint-ink);margin-top:1px}
 
 /* ---- ばん ---- */
 .board-wrap{background:#fff;border:4px solid var(--pink);border-radius:18px;padding:8px;
-  box-shadow:0 6px 0 #ffd0e0;}
+  box-shadow:0 6px 0 var(--shadow-soft);}
 .board{position:relative;width:100%;aspect-ratio:var(--c)/var(--r);
   display:grid;grid-template-columns:repeat(var(--c),1fr);grid-template-rows:repeat(var(--r),1fr);}
-.cell{border:1.5px solid #ffe0ec;position:relative;display:flex;align-items:center;justify-content:center}
+.cell{border:1.5px solid var(--grid-line);position:relative;display:flex;align-items:center;justify-content:center}
 .cell.wall{background:var(--lav);border-color:var(--lav-d);border-radius:6px}
 .cell.wall::after{content:"";position:absolute;inset:22%;border-radius:4px;
   background:repeating-linear-gradient(45deg,#fff5,#fff5 3px,transparent 3px,transparent 7px)}
@@ -104,14 +124,14 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
 .trail-rope.up{stroke:var(--mint-d)}
 .trail-rope.down{stroke:var(--lav-d)}
 .trail-rope.left{stroke:var(--peach-d)}
-.trail-rope.right{stroke:var(--pink-d)}
+.trail-rope.right{stroke:var(--dirR-d)}
 .trail-mark{position:absolute;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;
   pointer-events:none;z-index:4;animation:pop .2s;box-shadow:0 0 0 2px #fff}
 .trail-mark.up{background:var(--mintbg);color:var(--mint-d)}
 .trail-mark.down{background:var(--lavbg);color:var(--lav-d)}
 .trail-mark.left{background:var(--peachbg);color:var(--peach-d)}
-.trail-mark.right{background:var(--pinkbg);color:var(--pink-d)}
+.trail-mark.right{background:var(--dirRbg);color:var(--dirR-d)}
 .trail-mark.start{background:#fff;border:2px solid var(--pink);font-size:11px}
 
 /* ---- ねこちゃん ---- */
@@ -138,13 +158,13 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
   overflow-y:auto;scroll-behavior:smooth;
   display:flex;flex-wrap:wrap;align-content:flex-start;align-items:flex-start;gap:10px 8px}
 .railbox:has(.rail-empty){align-content:center;justify-content:center}
-.rail-empty{color:#d99ab8;font-size:12px;padding:6px 2px}
+.rail-empty{color:var(--muted);font-size:12px;padding:6px 2px}
 .chip{flex:0 0 auto;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
   font-size:24px;color:var(--ink);border:2.5px solid;animation:pop .25s}
 .chip.up{background:var(--mintbg);border-color:var(--mint)}
 .chip.down{background:var(--lavbg);border-color:var(--lav)}
 .chip.left{background:var(--peachbg);border-color:var(--peach-d)}
-.chip.right{background:var(--pinkbg);border-color:var(--pink)}
+.chip.right{background:var(--dirRbg);border-color:var(--dirR)}
 .chip.doing{transform:scale(1.15);box-shadow:0 0 0 3px #fff,0 0 0 6px var(--sun)}
 .grp{flex:0 0 auto;position:relative;display:flex;gap:3px;padding:2px;border-radius:14px}
 .grp.doing{background:#fff6da;box-shadow:0 0 0 3px var(--sun)}
@@ -209,7 +229,7 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
 .dir.up{background:var(--mintbg);border-color:var(--mint)}
 .dir.left{background:var(--peachbg);border-color:var(--peach-d)}
 .dir.down{background:var(--lavbg);border-color:var(--lav)}
-.dir.right{aspect-ratio:1;background:var(--pinkbg);border-color:var(--pink)}
+.dir.right{aspect-ratio:1;background:var(--dirRbg);border-color:var(--dirR)}
 
 /* ---- そうさボタン ---- */
 .controls{display:flex;gap:8px}
@@ -231,7 +251,7 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
   background:rgba(255,180,205,.35);backdrop-filter:blur(2px);z-index:50}
 .overlay.on{display:flex}
 .clear-card{background:#fff;border:4px solid var(--pink);border-radius:24px;padding:26px 30px;text-align:center;
-  box-shadow:0 10px 0 #ffd0e0;animation:pop .4s;max-width:82vw}
+  box-shadow:0 10px 0 var(--shadow-soft);animation:pop .4s;max-width:82vw}
 .clear-card h2{font-family:"Mochiy Pop One",sans-serif;color:var(--pink);font-size:26px;margin:6px 0 4px}
 .clear-card p{color:var(--ink);font-size:14px;margin:0 0 16px}
 #confirmMsg{white-space:pre-line}
@@ -250,7 +270,8 @@ h1{font-family:"Mochiy Pop One",sans-serif;font-weight:400;color:var(--pink);
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:left .12s linear,top .12s linear!important}
 }
-footer{font-size:11px;color:#c99;margin-top:2px;text-align:center}
+footer{font-size:11px;color:var(--muted);margin-top:2px;text-align:center}
+footer .ver{display:block;font-size:10px;opacity:.75;margin-top:3px;letter-spacing:.04em}
 </style>
 </head>
 <body>
@@ -317,7 +338,8 @@ footer{font-size:11px;color:#c99;margin-top:2px;text-align:center}
     </div>
   </div>
 
-  <footer>やじるしを タップ → 「じっこう」で ねこちゃんが うごくよ</footer>
+  <footer>やじるしを タップ → 「じっこう」で ねこちゃんが うごくよ
+    <span class="ver" id="ver"></span></footer>
 </div>
 
 <div class="confetti" id="confetti"></div>
@@ -364,6 +386,9 @@ footer{font-size:11px;color:#c99;margin-top:2px;text-align:center}
 
 <script>
 "use strict";
+
+/* ====== バージョン（かえたら ここだけ なおす）====== */
+const APP_VERSION = "1.2.0";
 
 /* ====== もんだいデータ（row 1 = いちばん うえ）====== */
 const LEVELS = [
@@ -437,19 +462,19 @@ const LEVELS = [
    walls:[[4,1],[5,1],[6,1],[7,1],[8,1],[9,1],[1,2],[2,2],[6,2],[7,2],[8,2],[9,2],
           [1,3],[2,3],[3,3],[4,3],[8,3],[9,3],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],
           [1,5],[2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5]],
-   gem:null, func:true, max:4},
+   gem:null, func:true, max:4, stage:2},
   {no:20, title:"ながい かいだんと ハート", hint:"うえ・みぎ・みぎ の わざで のぼって ♡ も とろう",
    c:9, r:5, start:[1,5], goal:[9,1],
    walls:[[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[1,2],[2,2],[3,2],[4,2],[8,2],[9,2],
           [1,3],[2,3],[6,3],[7,3],[8,3],[9,3],[4,4],[5,4],[6,4],[7,4],[8,4],[9,4],
           [2,5],[3,5],[4,5],[5,5],[6,5],[7,5],[8,5],[9,5]],
-   gem:[5,3], func:true, max:4},
+   gem:[5,3], func:true, max:4, stage:2},
   {no:21, title:"わざを 2つ つかおう", hint:"した・みぎ の わざと、みぎ・うえ・うえ の わざを つくろう",
    c:7, r:7, start:[1,4], goal:[7,1],
    walls:[[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[1,2],[2,2],[3,2],[4,2],[5,2],[6,2],
           [1,3],[2,3],[3,3],[4,3],[5,3],[2,4],[3,4],[4,4],[5,4],[7,4],[3,5],[4,5],[7,5],
           [1,6],[4,6],[6,6],[7,6],[1,7],[2,7],[6,7],[7,7]],
-   gem:null, func:true, max:6},
+   gem:null, func:true, max:6, stage:2},
 ];
 
 // いちど つかえるように なった ボタンは、あとの もんだいでも きえない
@@ -522,6 +547,8 @@ function loadLevel(i){
   funcUnlocked = FIRST_FUNC_IDX>=0 && li>=FIRST_FUNC_IDX;
   $("#numrow").classList.toggle("on", repUnlocked);
   $("#funcbox").classList.toggle("on", funcUnlocked);
+  // ステージ2（もんだい19から）は うすむらさきの みため にする
+  document.body.classList.toggle("stage2", lvl.stage===2);
   renderFuncSlots();
   buildBoard();
   renderQueue();
@@ -956,6 +983,7 @@ document.addEventListener("keydown",e=>{
   else if(/^[2-6]$/.test(e.key) && repUnlocked && !funcOpen){ e.preventDefault(); addRep(+e.key); }
 });
 
+$("#ver").textContent = "v" + APP_VERSION;
 loadLevel(0);
 </script>
 </body>
